@@ -3,43 +3,39 @@ import Todo from './Todo';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import './App.css';
 import db from './firebase';
+import firebase from 'firebase';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const[input, setInput] = useState('');
   
-
-
   // when the app loads, we need to listen to the database and...
   // fetch todos as they get added/ removed
+
+
   useEffect(() => {
     // this code here... fires up when the app.js loads
-    db.collection('todos').onSnapshot(snapshot =>{
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot =>{
       setTodos(snapshot.docs.map(doc => doc.data().todo))
     })
-   // effect
-    // return () => {
-      
-    // }
   }, []);
-
-
-
-
-  // useEffect(() => {
-  //   // this code here... fires up when the app.js loads
-  //   db.collection('todos').onSnapshot(snapshot =>{
-  //     setTodos(snapshot.docs.map(doc => doc.data().todo))
-  //   })
-  // }, []);
 
 
   //console.log(input);
   const addTodo = (event) => {
     // this will fire off when we click the button
     event.preventDefault(); //I will stop the refresh
-    console.log('*','I m workong');
-    setTodos([...todos, input]);
+    //console.log('*','I m workong');
+
+
+    db.collection('todos').add({
+      todo: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+
+
+
+    //setTodos([...todos, input]);
     setInput(''); // clear up input after clicking add todo button
   }
 
