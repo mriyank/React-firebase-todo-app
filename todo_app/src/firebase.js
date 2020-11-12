@@ -6,7 +6,7 @@
 
   const firebaseApp = firebase.initializeApp({
 
-//fill your own api here XD
+//fill your own api details here :)
   });
 const db = firebaseApp.firestore();
 export default db;
